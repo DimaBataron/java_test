@@ -17,6 +17,14 @@ public class Main {
        modCoordinates.translate(1,3);
        modCoordinates.scale(0.5f);
        System.out.println(modCoordinates.getPx() + " " + modCoordinates.pY);
+
+       Car lada = new Car(0.1f); // литр на 10 км
+        lada.gasStation(10f); // заправили
+        lada.translate(10f,0); // проехали 10км
+        System.out.println(lada.getFuel()+ " " + lada.getWay()); // 9 литров 10км
+        lada.translate(-1f,-1f); // вернулись обратно на на  sqrt(1+1) - больше
+        System.out.println(lada.getFuel()+ " " + lada.getWay());
+
     }
 
     /*1. Измените представленную в этой главе программу вывода календаря таким образом,
@@ -81,10 +89,22 @@ public class Main {
     в переменной р должна быть установлена точка с координатами (2, 3,5).
     (Тут нет модифицирующих методов. Все методы возвращают новый экземпляр класса типа Point)
      */
+
+    /**
+     * содержит методы возвращающие объекты типа <code>класса Point</code> хранящие
+     * положение точки на плоскости х у
+     * @author Батарон Д.А.
+     * @version 0.1
+     */
     private static class Point{
         private float pX;
         private float pY;
-        private float pScale;
+
+        /**
+         * конструктор устанавливает координаты точек в объекте
+         * @param pX указывает на координаты которые необходимо установить по х
+         * @param pY указывает на координаты которые необходимо установить по н
+         */
         public Point(float pX, float pY){
             this.pX = pX;
             this.pY = pY;
@@ -101,12 +121,23 @@ public class Main {
             return pY;
         }
 
+        /**
+         * метод перемещения по координатным осям
+         * @param tX расстояние перемещения по оси х
+         * @param tY расстояние перемещения п оси у
+         * @return возвращает новый обьект типа <code>Point</code> c измененными координатами указанным в параметрах
+         */
         public Point translate(float tX,float tY){
             tX += pX;
             tY += pY;
             return new Point(tX,tY);
         }
 
+        /**
+         * метод маштабирования координат по осям х у
+         * @param scl коэффициэнт маштаба
+         * @return @return возвращает новый обьект типа <code>Point</code> c измененными координатами коф scl
+         */
         public Point scale(float scl){
             float sX = pX*scl;
             float sY = pY*scl;
@@ -148,6 +179,48 @@ public class Main {
             pX *= scl;
             pY *= scl;
         }
+    }
+    /*
+    7. Введите документирующие комментарии в обе версии класса Point из предыдущих упражнений.
+     */
+    /*
+    9. Реализуйте класс Саг, моделирующий передвижение автомобиля на бензиновом топливе по оси х.
+     Предоставьте методы для передвижения автомобиля на заданное количество километров,
+     заполнения топливного бака заданным количеством литров бензина, вычисления расстояния,
+     пройденного от начала координат, а также уровня топлива в баке. Укажите расход топлива
+      (в км/л) в качестве параметра конструктора данного класса. Должен ли этот класс быть
+       неизменяемым и почему?
+     */
+    public static class Car{
+        private float fuel; // топливо
+        private Point kord; // текущая точка
+        private float way; // пройденный путь
+        private float consumption; // расход
+
+        public Car(float consumption){
+            this.consumption = consumption;
+            fuel = 0;
+            kord= new Point(0,0);
+            way = 0;
+        }
+        public void gasStation(float fuel){ //Заправим
+            this.fuel += fuel;
+        }
+        public void translate(float x , float y){
+            float tX = x-kord.getX();
+            float tY = y-kord.getY();
+            kord = kord.translate(tX,tY); // запоминаем последние координаты
+            float bias = (float)Math.sqrt(tX*tX + tY*tY); // смещение
+            way += bias;
+            fuel -= bias * consumption; // запоминаем соженное топливо
+        }
+        public float getFuel(){
+            return fuel;
+        }
+        public float getWay(){
+            return way;
+        }
+
     }
 
 }
