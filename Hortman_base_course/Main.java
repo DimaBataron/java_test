@@ -1,5 +1,7 @@
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Main {
 
@@ -8,7 +10,7 @@ public class Main {
         MyMetod dima = new MyMetod();
         int a = dima.modMetod(); // вызов модифицирующего метода возвращающего int
         System.out.println(a);
-        */
+
        Point coordinates = new Point(3, 4).translate(1, 3).scale((float) 0.5);
        System.out.println(coordinates.getX() + " " + coordinates.getY());
 
@@ -24,6 +26,16 @@ public class Main {
         System.out.println(lada.getFuel()+ " " + lada.getWay()); // 9 литров 10км
         lada.translate(-1f,-1f); // вернулись обратно на на  sqrt(1+1) - больше
         System.out.println(lada.getFuel()+ " " + lada.getWay());
+         */
+        ArrayList<Integer> arr = new ArrayList<>();
+        // добавляем в массив 10 элементов по номерам индексов
+        for(int i=1;i<11;i++)
+            arr.add(i);
+        // 10 раз вызываем RandomNumbers
+        for(int i=0,z=0;i<10;i++) {
+            z = RandomNumbers.randomElement(arr);
+            System.out.print(z+ " ");
+        }
 
     }
 
@@ -222,5 +234,29 @@ public class Main {
         }
 
     }
+    /*
+    10.Предоставьте в классе RandomNumbers два статических метода типа randomElement,
+     получающих произвольный элемент из обычного или списочного массива целочисленных значений.
+     (Если обычный или списочный массив пуст, должен быть возвращен нуль.)
+     Почему эти методы нельзя сделать методами экземпляра типа
+     t [ ] или ArrayList<Integer>?
+     */
+    public static class RandomNumbers{
+        private static final Random generator = new Random();
 
+        public static int randomElement(int[] a){
+            int len = a.length;
+            if(len>0){ // переданный массив не пуст
+                return a[generator.nextInt(len)];
+            }
+            else return 0;
+        }
+
+        public static int randomElement(ArrayList<Integer> a){
+            int len = a.size();
+            if(len>0)
+                return a.get(generator.nextInt(len));
+            else return 0;
+        }
+    }
 }
